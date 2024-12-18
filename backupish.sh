@@ -19,19 +19,22 @@ fi
 
 echo "💾 Starting the backup proccess...."
 
-# foreach DB 
-for DB in "${DATABASES[@]}"; do
-    echo "⌛️ Generating backup for Database: $DB"
+while IFS= read -r DB; do
+    # ignoring empty lines
+    if [[ -z "$DB" || "$DB" == \#* ]]; then
+        continue
+    fi
+    
+    echo "Creating backup for : $DB"
     FILENAME="${BACKUP_DIR}/${DB}_${DATE}.sql.gz"
     
-    # let's extract them
     mysqldump -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" "$DB" | gzip > "$FILENAME"
     
     if [ $? -eq 0 ]; then
         echo "😊 The backup for database $DB completed : $FILENAME"
     else
-        echo "😢 Something went wrong during backup database $DB" >&2
+         echo "😢 Something went wrong during backup database $DB" >&2
     fi
-done
+done < "$DB_LIST_FILE"
 
 echo "🤩 ENTIRE BACKUP PROCEDURE COMLETED!!!!"
