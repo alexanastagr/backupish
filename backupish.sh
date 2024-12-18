@@ -4,7 +4,7 @@ DB_USER="your_username"
 DB_PASSWORD="your_password"      
 DB_HOST="localhost"               
 BACKUP_DIR="databases" 
-DB_LIST="databases.txt"     
+DB_LIST="DBS.txt"     
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")   
 
 # DO NOT CHANGE ANYTHING BELOW THIS LINE 
@@ -13,6 +13,7 @@ mkdir -p "$BACKUP_DIR"
 
 if [ ! -f "$DB_LIST" ]; then
     echo "File $DB_LIST not found! Check the file path." >&2
+    touch "DBS.txt"
     exit 1
 fi
 
